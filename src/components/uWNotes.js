@@ -1,6 +1,6 @@
 import React from "react";
 import axios from "axios";
-export default function UWNotes({ bookData }) {
+export default function UWNotes({ bookData, data_key }) {
   const [notesData, setNotesData] = React.useState();
   const [notes, setNotes] = React.useState([]);
   const bookCode = bookData?.[0]?.code;
@@ -10,27 +10,27 @@ export default function UWNotes({ bookData }) {
         `/resources/search?languageCode=eng&bookCode=${bookCode}&resourceCollectionCode=UWTranslationWords&limit=100`,
         {
           headers: {
-            "api-key": "cb28f77b0a974656bc066e5d19e370c0",
+            "api-key": data_key,
           },
         }
       );
       setNotesData(response.data.items[0].id);
     };
-    bookCode && getNotesData();
-  }, [bookCode]);
+    bookCode && data_key && getNotesData();
+  }, [bookCode,data_key]);
 
   React.useEffect(() => {
     const notesSet = async () => {
       const res = await axios.get(`/resources/${notesData}`, {
         headers: {
-          "api-key": "cb28f77b0a974656bc066e5d19e370c0",
+          "api-key": data_key,
         },
       });
       setNotes(res.data);
     };
 
-    notesData && notesSet();
-  }, [notesData]);
+    notesData && data_key &&  notesSet();
+  }, [notesData, data_key]);
 
   return (
     <div>

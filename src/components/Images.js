@@ -1,37 +1,38 @@
 import React from "react";
 import axios from "axios";
 
-export default function Images() {
+export default function Images({bookData, data_key}) {
   const [imageData, setImageData] = React.useState();
   const [images, setImages] = React.useState([]);
-
+  const bookCode = bookData?.[0]?.code;
+  
   React.useEffect(() => {
     const getImageData = async () => {
       const response = await axios.get(
-        "/resources/search?resourceType=Images&languageCode=eng&bookCode=GEN&limit=100",
+        `/resources/search?resourceType=Images&languageCode=eng&bookCode=${bookCode}&limit=100`,
         {
           headers: {
-            "api-key": "cb28f77b0a974656bc066e5d19e370c0",
+            "api-key": data_key,
           },
         }
       );
       setImageData(response.data.items[0].id);
     };
-    getImageData();
-  }, []);
+   bookCode && data_key && getImageData();
+  }, [bookCode,data_key]);
 
   React.useEffect(() => {
     const imageSet = async () => {
       const res = await axios.get(`/resources/${imageData}`, {
         headers: {
-          "api-key": "cb28f77b0a974656bc066e5d19e370c0",
+          "api-key": data_key,
         },
       });
       setImages(res.data);
     };
 
-    imageData && imageSet();
-  }, [imageData]);
+    imageData && data_key && imageSet();
+  }, [data_key,imageData]);
 
   return (
     <div>

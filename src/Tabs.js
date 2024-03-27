@@ -12,6 +12,7 @@ import UWNotes from "./components/uWNotes";
 import Videos from "./components/Videos";
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
+
   return (
     <div
       role="tabpanel"
@@ -50,7 +51,7 @@ export default function BasicTabs() {
     const getBook = async () => {
       const res = await axios.get("/bible-books", {
         headers: {
-          "api-key": "cb28f77b0a974656bc066e5d19e370c0",
+          "api-key": process.env.REACT_APP_API_KEY,
         },
       });
       setBookData(res.data);
@@ -77,16 +78,22 @@ export default function BasicTabs() {
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
-        <Dictionary bookData={bookData} />
+        <Dictionary
+          bookData={bookData}
+          data_key={process.env.REACT_APP_API_KEY}
+        />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
-        <Images bookData={bookData} />
+        <Images bookData={bookData} data_key={process.env.REACT_APP_API_KEY} />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={2}>
-        <TyndaleNotes bookData={bookData} />
+        <TyndaleNotes
+          bookData={bookData}
+          data_key={process.env.REACT_APP_API_KEY}
+        />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={3}>
-        <UWNotes bookData={bookData} />
+        <UWNotes bookData={bookData} data_key={process.env.REACT_APP_API_KEY} />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={4}>
         <Videos />
